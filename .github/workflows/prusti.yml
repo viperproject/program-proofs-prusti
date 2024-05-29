@@ -1,0 +1,38 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copyright (c) 2022 ETH Zurich.
+
+name: Verify and Lint
+
+on:
+  push:
+    branches:
+    - master
+  pull_request: # run this workflow on every pull_request
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the current repository
+        uses: actions/checkout@v3
+      - name: Verify the examples and exercises written in Prusti
+        uses: viperproject/prusti-action@v1
+        with:
+          path: '.'
+
+  clippy_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          components: clippy
+          override: true
+      - uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --manifest-path Cargo.toml --all-features -- -D warnings
