@@ -1,0 +1,5 @@
+check_overflows = false
+
+# FUTURE: numberOfErrorsToReport
+# See: https://github.com/viperproject/prusti-dev/issues/1213
+extra_verifier_args = ["--numberOfErrorsToReport=0"]
